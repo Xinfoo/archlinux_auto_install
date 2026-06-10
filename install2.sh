@@ -103,17 +103,6 @@ pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-jetbra
 # 硬件驱动与桌面环境
 # -----------------------------------------------------------------------------
 
-echo 'Installing NVIDIA Driver (5s delay)...'
-sleep 5
-
-# Arch 的 mkinitcpio 默认 MODULES/HOOKS 行可能变化。
-# 这里是精确字符串替换，若默认文件格式变化，需要手动检查。
-sed -i 's/MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' "/etc/mkinitcpio.conf"
-sed -i 's/HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems fsck)/HOOKS=(base systemd autodetect microcode modconf keyboard sd-vconsole block filesystems fsck)/g' "/etc/mkinitcpio.conf"
-
-# NVIDIA 包名和推荐驱动组合可能随 Arch/NVIDIA 更新变化。
-pacman -S nvidia-open-dkms nvidia-utils vdpauinfo --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
-
 echo 'Installing Bluetooth Driver (5s delay)...'
 sleep 5
 pacman -S bluez bluez-utils wireless-regdb --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
@@ -225,7 +214,6 @@ sleep 5
 
 # GRUB/UEFI 工具包名和 grub-install 参数兼容性需要随 Arch 更新留意。
 pacman -S grub efibootmgr os-prober --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id='Arch Linux' --removable || { echo "GRUB installation failed"; exit 1; }
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id='Arch Linux' || { echo "GRUB installation failed"; exit 1; }
 grub-mkconfig -o /boot/grub/grub.cfg
 
