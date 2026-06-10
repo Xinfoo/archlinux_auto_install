@@ -4,11 +4,11 @@
 
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-cp "$SRC_DIR/install2.sh" "/mnt/root/install.sh"
-chmod a+x "/mnt/root/install.sh"
+cp "$SRC_DIR/install2.sh" "/mnt/install.sh"
+chmod a+x "/mnt/install.sh"
 
 echo 'Please run ./install.sh to complete the subsequent installation.'
 
 arch-chroot /mnt
 
-rm "/mnt/root/install.sh"
+rm "/mnt/install.sh"

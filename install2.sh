@@ -51,6 +51,9 @@ echo "$HOSTNAME" > "/etc/hostname"
 echo 'Configuring hosts file...'
 echo "127.0.0.1        $HOSTNAME.localdomain $HOSTNAME" >> "/etc/hosts"
 
+echo 'Configuring key board...'
+echo "KEYMAP=us" > "/etc/vconsole.conf"
+
 echo 'Set root password...'
 while true; do
     if passwd root; then
@@ -77,11 +80,11 @@ else
     exit 1
 fi
 
-echo 'Installing zsh (2s delay)...'
-sleep 2
+echo 'Installing zsh (5s delay)...'
+sleep 5
 
 # 包名随 Arch 仓库变化时，需要从这里开始核对。
-pacman -S zsh zsh-completions grml-zsh-config --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
+pacman -S zsh zsh-completions zsh-autosuggestions zsh-syntax-highlighting grml-zsh-config --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
 
 echo 'Installing network services (5s delay)...'
 sleep 5
@@ -89,7 +92,7 @@ pacman -S networkmanager iwd dhcpcd iftop nethogs --noconfirm || { echo "$ERROR_
 
 echo 'Installing development tools (5s delay)...'
 sleep 5
-pacman -S gdb git --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
+pacman -S git --noconfirm || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
 
 echo 'Installing fonts (5s delay)...'
 sleep 5
@@ -119,7 +122,7 @@ echo 'Installing desktop environment (5s delay)...'
 
 # plasma 组/包内容会随 KDE Plasma 在 Arch 中的打包方式变化。
 pacman -S --needed --noconfirm plasma || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
-pacman -S --needed --noconfirm konsole dolphin ark kate partitionmanager filelight spectacle kcalc gwenview okular kcharselect ksystemlog kompare k3b kid3 mpv haruna || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
+pacman -S --needed --noconfirm konsole dolphin ark kate partitionmanager filelight kcalc gwenview okular kcharselect ksystemlog kompare k3b kid3 mpv haruna || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
 pacman -S --needed --noconfirm fcitx5-im fcitx5-chinese-addons || { echo "$ERROR_PACKAGE_INSTALL"; exit 1; }
 
 echo '
@@ -179,7 +182,7 @@ systemctl enable sddm.service
 echo 'Installing extra software...'
 
 # 可选软件包名随 Arch 仓库变化时，优先核对这个数组。
-EXTRA_SOFTWARE1=("alacritty" "neovim" "neovide" "lua51" "luarocks" "ripgrep" "fd" "wl-clipboard" "chromium")
+EXTRA_SOFTWARE1=("alacritty" "neovim" "neovide" "lua51" "luarocks" "fd" "wl-clipboard" "chromium")
 echo "${EXTRA_SOFTWARE1[@]}"
 
 if confirm "Do you want to install these software?"; then
